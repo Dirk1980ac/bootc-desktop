@@ -49,6 +49,7 @@ dnf -y --exclude=rootfiles --exclude=akmod\* --setopt="install_weak_deps=False" 
 	waypipe \
 	yggdrasil \
 	mc \
+	screen \
 	dnf-bootc \
 	bootc-gtk
 
