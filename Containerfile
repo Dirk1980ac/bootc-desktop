@@ -73,7 +73,7 @@ systemctl enable \
 echo "Masking default update timer because it instantly reboots after update."
 systemctl mask bootc-fetch-apply-updates.timer
 
-rm /var/{log,cache,lib}/* -rf
+rm /var/{log,account,cache,lib,spool,www}/* -rf
 bootc container lint
 echo "The magic is done!"
 END_OF_BLOCK
