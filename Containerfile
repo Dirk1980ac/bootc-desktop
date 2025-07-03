@@ -1,6 +1,6 @@
 FROM registry.fedoraproject.org/fedora-bootc:latest
 
-ENV imagename="andreas-bootc"
+ENV imagename="bootc-desktop"
 ARG buildid=unset
 
 # Set Labels
