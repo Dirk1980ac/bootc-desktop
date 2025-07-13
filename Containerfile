@@ -11,12 +11,22 @@ LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
 
 # Install basic system
 RUN dnf -y --exclude=rootfiles --exclude=akmod\* install \
-	@^workstation-product-environment
+	@^workstation-product-environment usbutils
 
 # Copy prepared files
-COPY --chown=root:root scripts /usr/local/bin
-COPY --chown=root:root configs /etc
-COPY --chown=root:root systemd /usr/lib/systemd
+# Create additional directories
+RUN mkdir -p /etc/systemd/resolved.conf.d && \
+	chmod 755 /etc/systemd/resolved.conf.d
+
+# Copy prepared files
+COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.conf
+COPY --chmod=644 configs/polkit-40-freeipa.rules /etc/polkit-1/rules.d/40-freeipa.rules
+COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
+COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
+COPY --chmod=644 configs/dnf-vscode.repo /etc/yum.repos.d/vscode.repo
+COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
+COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
+COPY systemd /usr/lib/systemd/system
 
 # Install additional packages and do other neccessary stuff.
 RUN <<END_OF_BLOCK
@@ -29,7 +39,7 @@ dnf -y install \
 
 dnf -y install rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted
 
-dnf -y --repo=rpmfusion-nonfree-tainted install "*-firmware"
+dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*-firmware"
 
 echo "Do the really dirty deed!"
 dnf -y install --setopt="install_weak_deps=False" \

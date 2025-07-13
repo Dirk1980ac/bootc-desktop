@@ -6,7 +6,7 @@ ConditionPathExists=!/var/lib/.init-done
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/device-init.sh
+ExecStart=/usr/bin/device-init.sh
 ExecStartPost=touch /var/lib/.init-done
 
 [Install]
