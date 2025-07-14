@@ -65,6 +65,7 @@ COPY --chmod=644 configs/polkit-40-freeipa.rules /etc/polkit-1/rules.d/40-freeip
 COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
 COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
+COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
 COPY systemd /usr/lib/systemd/system
 
