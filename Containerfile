@@ -11,10 +11,10 @@ LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
 
 # Install basic system
 RUN dnf -y --exclude=rootfiles --exclude=akmod\* install \
-	@^workstation-product-environment usbutils
+	@^workstation-product-environment usbutils && dnf clean -y
 
 # Install additional packages and do other neccessary stuff.
-RUN <<END_OF_BLOCK
+RUN --mount=type=bind,source=./packages,target=/packages <<END_OF_BLOCK
 set -eu
 
 echo "Add and enable RPMFusion repos install nasty things like evil (proptietary) codecs."
@@ -49,6 +49,15 @@ dnf -y install --setopt="install_weak_deps=False" \
 	screen \
 	dnf-bootc \
 	bootc-gtk
+
+echo "Installing custom packages."
+ARCH=$(arch)
+shopt -s extglob
+shopt -s nullglob
+
+for file in /packages/*.@(${ARCH}.rpm|noarch.rpm); do
+	dnf -y install "$file"
+done
 
 echo "Cleaning up."
 dnf -y clean all
