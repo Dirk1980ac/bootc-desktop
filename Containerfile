@@ -80,11 +80,14 @@ COPY systemd /usr/lib/systemd/system
 COPY --chmod=644 configs/registries-sigstore.yaml /etc/containers/registries.d/sigstore.yaml
 COPY --chmod=644 configs/containers-toolbox.conf /etc/containers/toolbox.conf
 COPY --chmod=644 configs/containers-policy.json /etc/containers/policy.json
-COPY --chmod=644 keys/dirk1980.pub /usr/share/containers/dirk1980.pub
-COPY --chmod=644 keys/dirk1980-backup.pub /usr/share/containers/dirk1980-backup.pub
-
+COPY --chmod=644 keys /usr/share/containers/keys
 
 RUN <<END_OF_BLOCK
+set -eu
+
+chmod 755 /usr/share/containers/keys
+chmod 644 /usr/share/containers/keys/*
+
 echo "Writing image version information"
 echo "IMAGE_ID=${imagename}" >>/usr/lib/os-release
 echo "IMAGE_VERSION=${buildid}" >>/usr/lib/os-release

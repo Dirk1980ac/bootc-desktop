@@ -15,6 +15,5 @@ if [ ! -f /etc/yggdrasil.conf ]; then
 fi
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak  install --noninteractive -y io.itch.domestique_baston.kindergarten_massaker
 flatpak  install --noninteractive -y me.timschneeberger.GalaxyBudsClient
 flatpak  install --noninteractive -y me.timschneeberger.jdsp4linux
