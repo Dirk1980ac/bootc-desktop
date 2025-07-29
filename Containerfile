@@ -64,7 +64,7 @@ ARG buildid=unset
 LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
 	org.opencontainers.image.name=${imagemame} \
 	org.opencontainers.image.version=${buildid} \
-	org.opencontainers.image.description="Experimental custom desktop image"
+	org.opencontainers.image.description="Custom desktop image"
 
 # Copy prepared files
 COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.conf
@@ -84,9 +84,7 @@ COPY --chmod=644 keys /usr/share/containers/keys
 
 RUN <<END_OF_BLOCK
 set -eu
-
 chmod 755 /usr/share/containers/keys
-chmod 644 /usr/share/containers/keys/*
 
 echo "Writing image version information"
 echo "IMAGE_ID=${imagename}" >>/usr/lib/os-release
