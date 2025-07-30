@@ -87,7 +87,8 @@ systemctl enable \
 	systemd-zram-setup@zram0.service \
 	device-init.service \
 	bootc-fetch-update-only.timer \
-	watchdog
+	watchdog \
+	bootloader-update.service
 
 systemctl mask bootc-fetch-apply-updates.timer
 find /var/{log,cache} -type f ! -empty -delete
