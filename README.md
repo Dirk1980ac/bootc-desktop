@@ -17,8 +17,7 @@ release. The 'Fedora Workstation' environment without 'weak dependencies'.
 
 ## Get image
 
-The resulting images are automatically built and uploaded to dockerhub.
-
+The resulting images are automatically built and uploaded to the
 [Dockerhub repository](https://hub.docker.com/repository/docker/dirk1980/bootc-desktop/general).
 
 Podman/docker URL: docker.io/dirk1980/bootc-desktop:latest
