@@ -55,13 +55,13 @@ ARG buildid=unset
 
 # Set Labels
 LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
+	org.opencontainers.image.authors="Dirk Gottschalk" \
 	org.opencontainers.image.name=${imagemame} \
 	org.opencontainers.image.version=${buildid} \
 	org.opencontainers.image.description="Custom desktop image"
 
 # Copy prepared files
 COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.conf
-COPY --chmod=644 configs/polkit-40-freeipa.rules /etc/polkit-1/rules.d/40-freeipa.rules
 COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
 COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
