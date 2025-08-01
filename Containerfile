@@ -3,6 +3,7 @@ ENV imagename="bootc-desktop"
 
 # Install basic system
 RUN dnf -y --exclude=rootfiles --exclude=akmod\* \
+	--exclude="virtualbox-guest-additions" \
 	--setopt="install_weak_deps=False" install \
 	@^workstation-product-environment usbutils
 
@@ -50,7 +51,6 @@ for file in /packages/*.@(${ARCH}.rpm|noarch.rpm); do
 	dnf -y install "$file"
 done
 
-dnf -y clean all
 END_OF_BLOCK
 
 ARG buildid=unset
@@ -81,6 +81,7 @@ COPY --chmod=644 keys /usr/share/containers/keys
 RUN <<END_OF_BLOCK
 set -eu
 
+dnf -y clean all
 chmod 755 /usr/share/containers/keys
 rm -f /etc/containers/policy.json
 rm -rf /etc/containers/registries.conf.d
