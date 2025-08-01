@@ -4,7 +4,7 @@ ENV imagename="bootc-desktop"
 # Install basic system
 RUN dnf -y --exclude=rootfiles --exclude=akmod\* \
 	--setopt="install_weak_deps=False" install \
-	@^workstation-product-environment usbutils && dnf -y clean all
+	@^workstation-product-environment usbutils
 
 # Install additional packages and do other neccessary stuff.
 RUN --mount=type=bind,source=./packages,target=/packages <<END_OF_BLOCK
