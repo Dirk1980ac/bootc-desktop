@@ -24,7 +24,6 @@ trim_trailing_whitespace = true
 [*.{sh,bash,zsh}]
 indent_style = tab
 indent_size = 4
-shell_variant      = auto # --shell
 brace_wrapping_mode= before_opening_brace # --brace-wrapping-mode
 binary_next_line   = false # --binary-next-line
 switch_case_indent = true # --case-indent

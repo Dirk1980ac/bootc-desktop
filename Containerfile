@@ -41,6 +41,7 @@ dnf -y install --setopt="install_weak_deps=False" \
 	dnf-bootc \
 	bootc-gtk \
 	pass \
+	fail2ban \
 	browserpass-*
 
 ARCH=$(arch)
@@ -69,6 +70,7 @@ COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
+COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
 COPY systemd /usr/lib/systemd/system
 
 # Image signature settings
