@@ -41,13 +41,14 @@ dnf -y install --setopt="install_weak_deps=False" \
 	dnf-bootc \
 	bootc-gtk \
 	pass \
+	fail2ban \
 	browserpass-*
 
 ARCH=$(arch)
 shopt -s extglob
 shopt -s nullglob
 
-for file in /packages/*.@(${ARCH}.rpm|noarch.rpm); do
+for file in /packages/*.@("${ARCH}".rpm|noarch.rpm); do
 	dnf -y install "$file"
 done
 
@@ -69,6 +70,7 @@ COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
+COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
 COPY systemd /usr/lib/systemd/system
 
 # Image signature settings
@@ -98,6 +100,7 @@ systemctl enable \
 	device-init.service \
 	bootc-fetch-update-only.timer \
 	watchdog \
+	fail2ban \
 	bootloader-update.service
 
 systemctl mask bootc-fetch-apply-updates.timer
