@@ -17,7 +17,6 @@ dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*
 
 END_OF_BLOCK
 
-
 # Install non-GUI software
 RUN dnf -y --exclude="virtualbox-guest-additions" install \
 	cockpit \
@@ -48,7 +47,7 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	bootc-gtk \
 	browserpass-*
 
-# Install additional packages (if available).
+# Install local packages (if available).
 RUN --mount=type=bind,source=./packages,target=/packages  <<END_OF_BLOCK
 set -eu
 ARCH=$(arch)
