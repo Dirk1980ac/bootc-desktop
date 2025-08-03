@@ -65,7 +65,7 @@ ARG buildid=unset
 # Set Labels
 LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
 	org.opencontainers.image.authors="Dirk Gottschalk" \
-	org.opencontainers.image.name=${imagemame} \
+	org.opencontainers.image.name=${imagename} \
 	org.opencontainers.image.version=${buildid} \
 	org.opencontainers.image.description="Custom desktop image"
 
