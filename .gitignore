@@ -1,0 +1,2 @@
+# Do not leak lokal RPMs into public git repo
+packages/*.rpm
