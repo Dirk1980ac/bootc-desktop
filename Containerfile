@@ -73,7 +73,7 @@ LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
 COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.conf
 COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
 COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
-COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
+COPY --chmod=700 scripts/device-init.sh /usr/bin/device-init.sh
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
 COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
@@ -94,7 +94,6 @@ set -eu
 
 chmod 755 /usr/share/containers/keys
 rm -f /etc/containers/policy.json
-rm -rf /etc/containers/registries.conf.d
 ln -s /usr/share/containers/registries.d/sigstore.yaml /etc/containers/registries.d/sigstore.yaml
 ln -s /usr/share/containers/policy.json /etc/containers/policy.json
 
