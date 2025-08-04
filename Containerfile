@@ -77,7 +77,10 @@ COPY --chmod=600 scripts/device-init.sh /usr/bin/device-init.sh
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
 COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
+COPY --chmod=644 configs/dconf-user /usr/share/dconf/profile/user
+COPY --chmod=644 configs/dconf-00-extensions /etc/dconf/db/local.d/00-extensions
 COPY systemd /usr/lib/systemd/system
+COPY skel /etc/skel
 
 # Image signature settings
 COPY --chmod=644 configs/registries-sigstore.yaml /usr/share/containers/registries.d/sigstore.yaml
@@ -94,6 +97,8 @@ rm -f /etc/containers/policy.json
 rm -rf /etc/containers/registries.conf.d
 ln -s /usr/share/containers/registries.d/sigstore.yaml /etc/containers/registries.d/sigstore.yaml
 ln -s /usr/share/containers/policy.json /etc/containers/policy.json
+
+dconf update
 
 cat <<EOF >>/usr/lib/os-release
 IMAGE_ID=${imagename}
