@@ -95,14 +95,7 @@ rm -rf /etc/containers/registries.conf.d
 ln -s /usr/share/containers/registries.d/sigstore.yaml /etc/containers/registries.d/sigstore.yaml
 ln -s /usr/share/containers/policy.json /etc/containers/policy.json
 
-cat << EOF >>/usr/lib/os-release
-NAME=${imagename}
-VERSION="${buildid}"
-ID="${imagename}"
-ID_LIKE=fedora
-VERSION_ID=${buildid}
-PRETTY_NAME="${imagename} ${buildid}"
-ANSI_COLOR="0;34"
+cat <<EOF >>/usr/lib/os-release
 IMAGE_ID=${imagename}
 IMAGE_VERSION=${buildid}
 EOF
