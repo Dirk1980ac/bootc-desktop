@@ -50,11 +50,10 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 # Install local packages (if available).
 RUN --mount=type=bind,source=./packages,target=/packages  <<END_OF_BLOCK
 set -eu
-ARCH=$(arch)
 shopt -s extglob
 shopt -s nullglob
 
-for file in /packages/*.@("${ARCH}".rpm|noarch.rpm); do
+for file in /packages/*.@("$(arch)".rpm|noarch.rpm); do
 dnf -y install "$file"
 done
 
