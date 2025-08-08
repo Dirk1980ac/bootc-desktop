@@ -12,7 +12,10 @@
 					"keyPaths": [
 						"/usr/share/containers/keys/dirk1980.pub",
 						"/usr/share/containers/keys/dirk1980-backup.pub"
-					]
+					],
+					"signedIdentity": {
+						"type": "matchRepository"
+					}
 				}
 			],
 			"docker.io/glockgmbh": [
@@ -23,7 +26,10 @@
 						"/usr/share/containers/keys/glockgmbh-backup.pub",
 						"/usr/share/containers/keys/dirk1980.pub",
 						"/usr/share/containers/keys/dirk1980-backup.pub"
-					]
+					],
+					"signedIdentity": {
+						"type": "matchRepository"
+					}
 				}
 			]
 		}

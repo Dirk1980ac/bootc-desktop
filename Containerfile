@@ -5,8 +5,7 @@ ENV imagename="bootc-desktop"
 RUN <<END_OF_BLOCK
 dnf -y --exclude=rootfiles --exclude=akmod\* \
 	--exclude="virtualbox-guest-additions" \
-	--setopt="install_weak_deps=False" install \
-	@^workstation-product-environment usbutils
+	install @^workstation-product-environment usbutils
 
 dnf -y install \
 	https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
@@ -18,7 +17,8 @@ dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*
 END_OF_BLOCK
 
 # Install non-GUI software
-RUN dnf -y --exclude="virtualbox-guest-additions" install \
+RUN dnf -y --setopt="install_weak_deps=False"  \
+	--exclude="virtualbox-guest-additions" install \
 	cockpit \
 	pass \
 	fail2ban \
@@ -45,7 +45,7 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	snapshot \
 	telegram-desktop \
 	bootc-gtk \
-	browserpass-*
+	browserpass*
 
 # Install local packages (if available).
 RUN --mount=type=bind,source=./packages,target=/packages  <<END_OF_BLOCK
