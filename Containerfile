@@ -3,8 +3,13 @@ ENV imagename="bootc-desktop"
 
 # Install basic system
 RUN <<END_OF_BLOCK
-dnf -y --exclude=rootfiles --exclude=akmod\* \
+set -eu
+
+mkdir /var/roothome
+
+dnf -y --exclude=akmod\* \
 	--exclude="virtualbox-guest-additions" \
+	--setopt="install_weak_deps=False" \
 	install @^workstation-product-environment usbutils
 
 dnf -y install \
@@ -16,10 +21,31 @@ dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*
 
 END_OF_BLOCK
 
+# Assume Raspberry PI if building aarch64. At least for now.
+RUN <<EORUN
+set -eu
+
+if [ "$(arch)" == "aarch64" ]; then
+	dnf install -y bcm2711-firmware uboot-images-armv8
+	cp -P /usr/share/uboot/rpi_arm64/u-boot.bin /boot/efi/rpi-u-boot.bin
+	mkdir -p /usr/lib/bootc-raspi-firmwares
+	cp -a /boot/efi/. /usr/lib/bootc-raspi-firmwares/
+	dnf remove -y bcm2711-firmware uboot-images-armv8
+	mkdir /usr/bin/bootupctl-orig
+	mv /usr/bin/bootupctl /usr/bin/bootupctl-orig/
+fi
+EORUN
+
+COPY scripts/bootupctl-shim /usr/bin/bootupctl
+
 # Install non-GUI software
 RUN dnf -y --setopt="install_weak_deps=False"  \
 	--exclude="virtualbox-guest-additions" install \
+	--setopt="install_weak_deps=False" \
 	cockpit \
+	cockpit-bridge \
+	cockpit-storaged \
+	cockpit-selinux \
 	pass \
 	fail2ban \
 	dnf-bootc \
@@ -41,6 +67,7 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	gimp \
 	gnucash \
 	libreoffice-langpack-de \
+	libreoffice-base \
 	mpv \
 	snapshot \
 	telegram-desktop \
@@ -73,11 +100,14 @@ COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.con
 COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
 COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=700 scripts/device-init.sh /usr/bin/device-init.sh
+COPY --chmod=700 scripts/bootupctl-shim /usr/bin/bootupctl
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
 COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
 COPY --chmod=644 configs/dconf-user /usr/share/dconf/profile/user
 COPY --chmod=644 configs/dconf-00-extensions /etc/dconf/db/local.d/00-extensions
+COPY --chmod=644 configs/tmpfiles.conf /usr/lib/tmpfiles.d/cardterm.conf
+COPY --chmod=644 configs/sysusers-yggdrasil.conf /usr/lib/sysusers.d/yggdrasil.conf
 COPY systemd /usr/lib/systemd/system
 COPY skel /etc/skel
 
@@ -98,10 +128,7 @@ ln -s /usr/share/containers/policy.json /etc/containers/policy.json
 
 dconf update
 
-cat <<EOF >>/usr/lib/os-release
-IMAGE_ID=${imagename}
-IMAGE_VERSION=${buildid}
-EOF
+{ echo "IMAGE_ID=${imagename}"; echo "IMAGE_VERSION=${buildid}"; } >>/usr/lib/os-release
 
 systemctl enable \
 	cockpit.socket \
@@ -116,6 +143,9 @@ systemctl enable \
 systemctl mask bootc-fetch-apply-updates.timer
 
 dnf -y clean all
-find /var/{log,cache} -type f ! -empty -delete
+rm -rf /var/cache/*
+rm -rf /var/log/*
+
 bootc container lint
+
 END_OF_BLOCK

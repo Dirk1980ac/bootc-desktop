@@ -1,7 +1,7 @@
 {
 	"default": [
 		{
-			"type": "reject"
+			"type": "insecureAcceptAnything"
 		}
 	],
 	"transports": {
@@ -13,11 +13,6 @@
 			]
 		},
 		"docker": {
-			"quay.io/fedora": [
-				{
-					"type": "insecureAcceptAnything"
-				}
-			],
 			"docker.io/dirk1980": [
 				{
 					"type": "sigstoreSigned",
