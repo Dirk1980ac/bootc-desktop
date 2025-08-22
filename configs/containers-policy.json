@@ -29,20 +29,6 @@
 						"type": "matchRepoDigestOrExact"
 					}
 				}
-			],
-			"docker.io/glockgmbh": [
-				{
-					"type": "sigstoreSigned",
-					"keyPaths": [
-						"/usr/share/containers/keys/glockgmbh.pub",
-						"/usr/share/containers/keys/glockgmbh-backup.pub",
-						"/usr/share/containers/keys/dirk1980.pub",
-						"/usr/share/containers/keys/dirk1980-backup.pub"
-					],
-					"signedIdentity": {
-						"type": "matchRepoDigestOrExact"
-					}
-				}
 			]
 		}
 	}
