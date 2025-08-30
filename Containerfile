@@ -86,7 +86,8 @@ done
 
 END_OF_BLOCK
 
-ARG buildid=unset
+ARG buildid="Test build"
+ARG sshkeys=""
 
 # Set Labels
 LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
@@ -128,7 +129,13 @@ ln -s /usr/share/containers/policy.json /etc/containers/policy.json
 
 dconf update
 
-{ echo "IMAGE_ID=${imagename}"; echo "IMAGE_VERSION=${buildid}"; } >>/usr/lib/os-release
+echo "IMAGE_ID=${imagename}" >>/usr/lib/os-release
+echo "IMAGE_VERSION=${buildid}" >>/usr/lib/os-release
+
+if [[ -n "$sshkeys" ]]; then
+	mkdir -p /usr/ssh
+	echo $sshkeys > /usr/ssh/root.pub
+fi
 
 systemctl enable \
 	cockpit.socket \
