@@ -86,7 +86,7 @@ done
 
 END_OF_BLOCK
 
-ARG buildid="Test build"
+ARG buildid="unset"
 ARG sshkeys=""
 
 # Set Labels
