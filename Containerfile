@@ -150,9 +150,7 @@ systemctl enable \
 systemctl mask bootc-fetch-apply-updates.timer
 
 dnf -y clean all
-rm -rf /var/cache/*
-rm -rf /var/log/*
-
+rm -rf /var/{cache,log,tmp,spool}/*
 bootc container lint
 
 END_OF_BLOCK
