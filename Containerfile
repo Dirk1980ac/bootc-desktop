@@ -82,7 +82,7 @@ shopt -s extglob
 shopt -s nullglob
 
 for file in /packages/*.@("$(arch)".rpm|noarch.rpm); do
-dnf -y install "$file"
+	dnf -y install "$file"
 done
 
 END_OF_BLOCK
