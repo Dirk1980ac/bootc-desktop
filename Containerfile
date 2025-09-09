@@ -73,7 +73,9 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	snapshot \
 	telegram-desktop \
 	bootc-gtk \
-	browserpass*
+	browserpass* \
+	easyeffects \
+	lv2-*-plugins
 
 # Install local packages (if available).
 RUN --mount=type=bind,source=./packages,target=/packages  <<END_OF_BLOCK
