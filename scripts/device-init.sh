@@ -12,7 +12,3 @@ systtemctl  enable --now yggdrasil.service
 firewall-offline-cmd  --new-zone=yggdrasil
 firewall-offline-cmd  --zone=yggdrasil --add-interface=tun0
 firewall-offline-cmd  --zone=yggdrasil --add-service=ssh
-
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install --noninteractive -y me.timschneeberger.GalaxyBudsClient
-flatpak install --noninteractive -y me.timschneeberger.jdsp4linux
