@@ -10,7 +10,7 @@ download-updates-notify=false
 allow-updates=false
 download-updates=false
 
-[/org/gnome/shell/extensions/dash-to-dock]
+[org/gnome/shell/extensions/dash-to-dock]
 disable-overview-on-startup=true
 show-mounts=false
 show-apps-button=false
