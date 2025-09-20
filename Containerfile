@@ -1,26 +1,6 @@
 FROM quay.io/fedora/fedora-bootc:latest
 ENV imagename="bootc-desktop"
 
-# Install basic system
-RUN <<END_OF_BLOCK
-set -eu
-
-mkdir /var/roothome
-
-dnf -y --exclude=akmod\* \
-	--exclude="virtualbox-guest-additions" \
-	--setopt="install_weak_deps=False" \
-	install @^workstation-product-environment usbutils
-
-dnf -y install \
-	https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-	https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-dnf -y install rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted
-dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*-firmware"
-
-END_OF_BLOCK
-
 # Assume Raspberry PI if building aarch64. At least for now.
 RUN --mount=type=bind,source=./scripts,target=/scripts <<EORUN
 set -eu
@@ -86,6 +66,27 @@ shopt -s nullglob
 for file in /packages/*.@("$(arch)".rpm|noarch.rpm); do
 	dnf -y install "$file"
 done
+
+END_OF_BLOCK
+
+
+# Install basic system
+RUN <<END_OF_BLOCK
+set -eu
+
+mkdir /var/roothome
+
+dnf -y --exclude=akmod\* \
+	--exclude="virtualbox-guest-additions" \
+	--setopt="install_weak_deps=False" \
+	install @^workstation-product-environment usbutils
+
+dnf -y install \
+	https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+	https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+dnf -y install rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted
+dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*-firmware"
 
 END_OF_BLOCK
 
