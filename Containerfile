@@ -1,24 +1,6 @@
 FROM quay.io/fedora/fedora-bootc:latest
 ENV imagename="bootc-desktop"
 
-# Assume Raspberry PI if building aarch64. At least for now.
-RUN --mount=type=bind,source=./scripts,target=/scripts <<EORUN
-set -eu
-
-if [ "$(arch)" == "aarch64" ]; then
-	dnf install -y bcm2711-firmware uboot-images-armv8
-	cp -P /usr/share/uboot/rpi_arm64/u-boot.bin /boot/efi/rpi-u-boot.bin
-	mkdir -p /usr/lib/bootc-raspi-firmwares
-	cp -a /boot/efi/. /usr/lib/bootc-raspi-firmwares/
-	dnf remove -y bcm2711-firmware uboot-images-armv8
-	mkdir /usr/bin/bootupctl-orig
-	mv /usr/bin/bootupctl /usr/bin/bootupctl-orig/
-	cp /scripts/bootupctl-shim /usr/bin/bootupctl
-fi
-EORUN
-
-COPY scripts/bootupctl-shim /usr/bin/bootupctl
-
 # Install non-GUI software
 RUN dnf -y --setopt="install_weak_deps=False"  \
 	--exclude="virtualbox-guest-additions" install \
@@ -92,6 +74,7 @@ END_OF_BLOCK
 
 ARG buildid="unset"
 ARG sshkeys=""
+ARG build_rpi="false"
 
 # Set Labels
 LABEL org.opencontainers.image.vendor="Dirk Gottschalk" \
@@ -123,8 +106,19 @@ COPY --chmod=644 configs/containers-policy.json /usr/share/containers/policy.jso
 COPY --chmod=644 keys /usr/share/containers/keys
 
 # Final configuration
-RUN <<END_OF_BLOCK
+RUN --mount=type=bind,source=./scripts,target=/scripts <<EORUN
 set -eu
+
+if [[ "${build_rpi}" == true ]] && [[ "$(arch)" == "aarch64" ]]; then
+	dnf install -y bcm2711-firmware uboot-images-armv8
+	cp -P /usr/share/uboot/rpi_arm64/u-boot.bin /boot/efi/rpi-u-boot.bin
+	mkdir -p /usr/lib/bootc-raspi-firmwares
+	cp -a /boot/efi/. /usr/lib/bootc-raspi-firmwares/
+	dnf remove -y bcm2711-firmware uboot-images-armv8
+	mkdir /usr/bin/bootupctl-orig
+	mv /usr/bin/bootupctl /usr/bin/bootupctl-orig/
+	cp /scripts/bootupctl-shim /usr/bin/bootupctl
+fi
 
 chmod 755 /usr/share/containers/keys
 rm -f /etc/containers/policy.json
