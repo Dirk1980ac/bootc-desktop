@@ -1,6 +1,19 @@
 FROM quay.io/fedora/fedora-bootc:latest
 ENV imagename="bootc-desktop"
 
+RUN <<EORUN
+set -eu
+
+dnf -y install dnf5-plugins usbutils \
+	https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+	https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+dnf -y copr enable arrobbins/JDSP4Linux
+dnf -y copr enable neilalexander/yggdrasil-go
+dnf -y install rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted
+dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*-firmware"
+EORUN
+
 # Install non-GUI software
 RUN dnf -y --setopt="install_weak_deps=False"  \
 	--exclude="virtualbox-guest-additions" install \
@@ -35,9 +48,8 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	snapshot \
 	telegram-desktop \
 	bootc-gtk \
-	browserpass* \
-	easyeffects \
-	lv2-*-plugins
+	jamesdsp \
+	browserpass*
 
 # Install local packages (if available).
 RUN --mount=type=bind,source=./packages,target=/packages  <<END_OF_BLOCK
@@ -62,14 +74,6 @@ dnf -y --exclude=akmod\* \
 	--exclude="virtualbox-guest-additions" \
 	--setopt="install_weak_deps=False" \
 	install @^workstation-product-environment usbutils
-
-dnf -y install \
-	https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-	https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-dnf -y install rpmfusion-free-release-tainted rpmfusion-nonfree-release-tainted
-dnf -y --repo=rpmfusion-nonfree-tainted --repo=rpmfusion-free-tainted install "*-firmware"
-
 END_OF_BLOCK
 
 ARG buildid="unset"
