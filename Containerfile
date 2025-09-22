@@ -48,6 +48,7 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	snapshot \
 	telegram-desktop \
 	bootc-gtk \
+	easyeffects \
 	jamesdsp \
 	browserpass*
 
