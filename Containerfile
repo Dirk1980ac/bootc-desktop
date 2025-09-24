@@ -64,7 +64,6 @@ done
 
 END_OF_BLOCK
 
-
 # Install basic system
 RUN <<END_OF_BLOCK
 set -eu
