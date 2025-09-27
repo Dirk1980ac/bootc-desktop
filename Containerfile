@@ -98,6 +98,7 @@ COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-l
 COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
 COPY --chmod=644 configs/dconf-user /usr/share/dconf/profile/user
 COPY --chmod=644 configs/dconf-00-extensions /etc/dconf/db/local.d/00-extensions
+COPY --chmod=644 configs/dconf-00-uisettings /etc/dconf/db/local.d/00-uisettings
 COPY --chmod=644 configs/tmpfiles.conf /usr/lib/tmpfiles.d/cardterm.conf
 COPY --chmod=644 configs/sysusers-yggdrasil.conf /usr/lib/sysusers.d/yggdrasil.conf
 COPY systemd /usr/lib/systemd/system
@@ -109,7 +110,7 @@ COPY --chmod=644 configs/containers-toolbox.conf /etc/containers/toolbox.conf
 COPY --chmod=644 configs/containers-policy.json /usr/share/containers/policy.json
 COPY --chmod=644 keys /usr/share/containers/keys
 
-# Final configuration
+# Inject formware for RaspBerry Pi if 'build_rpi' is true
 RUN --mount=type=bind,source=./scripts,target=/scripts <<EORUN
 set -eu
 
@@ -123,7 +124,10 @@ if [[ "${build_rpi}" == true ]] && [[ "$(arch)" == "aarch64" ]]; then
 	mv /usr/bin/bootupctl /usr/bin/bootupctl-orig/
 	cp /scripts/bootupctl-shim /usr/bin/bootupctl
 fi
+EORUN
 
+# Final configuration
+RUN <<EORUN
 chmod 755 /usr/share/containers/keys
 rm -f /etc/containers/policy.json
 ln -s /usr/share/containers/registries.d/sigstore.yaml /etc/containers/registries.d/sigstore.yaml
