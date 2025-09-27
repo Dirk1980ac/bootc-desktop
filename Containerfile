@@ -50,6 +50,7 @@ RUN dnf -y install --setopt="install_weak_deps=False" \
 	bootc-gtk \
 	easyeffects \
 	jamesdsp \
+	rpi-imager \
 	browserpass*
 
 # Install local packages (if available).
