@@ -71,10 +71,7 @@ set -eu
 
 mkdir /var/roothome
 
-dnf -y --exclude=akmod\* \
-	--exclude="virtualbox-guest-additions" \
-	--setopt="install_weak_deps=False" \
-	install @^workstation-product-environment usbutils
+dnf -y --exclude=akmod\* install @^workstation-product-environment usbutils
 
 dnf -y swap fedora-release-identity-basic fedora-release-identity-workstation
 
