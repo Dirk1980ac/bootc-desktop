@@ -96,7 +96,6 @@ COPY --chmod=600 configs/ssh-00-0local.conf /etc/ssh/sshd_config.d/00-0local.con
 COPY --chmod=644 configs/rpm-ostreed.conf /etc/rpm-ostreed.conf
 COPY --chmod=644 configs/watchdog.conf /etc/watchdog.conf
 COPY --chmod=700 scripts/device-init.sh /usr/bin/device-init.sh
-COPY --chmod=700 scripts/bootupctl-shim /usr/bin/bootupctl
 COPY --chmod=600 configs/sudoers-wheel /etc/sudoers.d/wheel
 COPY --chmod=644 configs/dns-override.conf /usr/lib/systemd/resolved.conf.d/zz-local.conf
 COPY --chmod=600 configs/jail-10-sshd.conf /etc/fail2ban/jail.d/10-sshd.conf
