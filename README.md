@@ -1,3 +1,7 @@
+This is an archived copy of this project.
+
+The project has moved to radicle to [this repository](https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3GuEAHzwuVeiACgJh1Rck8WSQNSE).
+
 # bootc-desktop
 
 ## Description
